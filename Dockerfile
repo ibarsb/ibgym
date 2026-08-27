@@ -17,4 +17,12 @@ RUN npm run build
 FROM nginx:alpine
 COPY web/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist /usr/share/nginx/html
+# Copy backend API code
+COPY api /app/api
+
+# Add entrypoint script to start backend and nginx
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 # exercise media (img/gif) is mounted at runtime from the media volume
+ENTRYPOINT ["/entrypoint.sh"]
