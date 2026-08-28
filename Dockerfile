@@ -20,9 +20,13 @@ COPY --from=build /app/dist /usr/share/nginx/html
 # Copy backend API code
 COPY api /app/api
 
+# Copy exercise media (img/gif) so the backend can serve it statically.
+# server.js serves /img/, /gif/ and /media/ from path.join(__dirname, '..', 'media')
+# which resolves to /app/media/ in the container.
+COPY media /app/media
+
 # Add entrypoint script to start backend and nginx
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-# exercise media (img/gif) is mounted at runtime from the media volume
 ENTRYPOINT ["/entrypoint.sh"]
